@@ -1,0 +1,32 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Mission from '../components/Mission.astro';
+import About from '../components/About.astro';
+import Team from '../components/Team.astro';
+import Benefits from '../components/Benefits.astro';
+import Testimonials from '../components/Testimonials.astro';
+import FeaturedArticles from '../components/FeaturedArticles.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+	title="Retos Turísticos | Revista científica para profesionales del sector"
+    description="Descubre los más audaces desafíos turísticos y publica tu investigación en Retos Turísticos, la revista líder en análisis del sector."
+>
+	<Header />
+	<main>
+		<Hero />
+		<Mission />
+		<About />
+		<Team />
+		<Benefits />
+		<Testimonials />
+		<FeaturedArticles />
+		<ContactForm />
+	</main>
+	<Footer />
+</Layout>

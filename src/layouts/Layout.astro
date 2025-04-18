@@ -1,0 +1,112 @@
+---
+import '@fontsource/inter/400.css'; // Importa pesos específicos si los usas
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '../styles/base.css'; // Importa estilos base de Tailwind
+
+interface Props {
+	title: string;
+    description: string; // Añadido para SEO
+}
+
+const { title, description } = Astro.props;
+const siteName = "Retos Turísticos";
+const defaultTitle = `${title} | ${siteName}`;
+const defaultDescription = description || "La revista líder en análisis y desafíos del sector turístico global.";
+const ogImageUrl = new URL('/mansion-xanadu.jpg', Astro.url).href; // Usando una imagen existente
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" /> <!-- Asegúrate de tener un favicon -->
+		<meta name="generator" content={Astro.generator} />
+
+        <!-- SEO Meta Tags -->
+		<title>{defaultTitle}</title>
+        <meta name="description" content={defaultDescription} />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={Astro.url} />
+        <meta property="og:title" content={defaultTitle} />
+        <meta property="og:description" content={defaultDescription} />
+        <meta property="og:image" content={ogImageUrl} />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={Astro.url} />
+        <meta property="twitter:title" content={defaultTitle} />
+        <meta property="twitter:description" content={defaultDescription} />
+        <meta property="twitter:image" content={ogImageUrl} />
+
+        <!-- Preconexión a Google Fonts si se usa desde CDN -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+        <!-- Scripts globales -->
+        <script src="../scripts/main.ts"></script>
+	</head>
+	<body class="bg-light-bg text-text-dark font-sans antialiased">
+		<slot /> <!-- Aquí se renderizará el contenido de las páginas -->
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" class="fixed bottom-0 left-0 w-full bg-white shadow-lg border-t border-light-gray transform transition-transform duration-500 translate-y-full z-50">
+      <div class="container mx-auto px-4 py-4 sm:py-6 flex flex-col sm:flex-row items-center justify-between">
+        <div class="text-text-medium mb-4 sm:mb-0 text-sm sm:text-base max-w-3xl">
+          <p>
+            Utilizamos cookies para mejorar su experiencia de navegación, mostrar contenido personalizado y analizar el tráfico del sitio. 
+            Al hacer clic en "Aceptar todas", usted consiente nuestro uso de cookies. 
+            <a href="/politica-cookies" class="text-primary hover:underline">Más información</a>.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="cookie-accept-essential" class="px-4 py-2 text-sm text-text-medium border border-light-gray rounded-lg hover:bg-light-gray transition-colors duration-300">
+            Solo esenciales
+          </button>
+          <button id="cookie-accept-all" class="px-4 py-2 text-sm text-white bg-primary rounded-lg hover:bg-secondary transition-colors duration-300">
+            Aceptar todas
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script is:inline>
+      // Mostrar banner de cookies si no hay consentimiento previo
+      document.addEventListener('DOMContentLoaded', function() {
+        // Comprobar si el usuario ya ha aceptado las cookies
+        const cookieConsent = localStorage.getItem('cookie-consent');
+        const cookieBanner = document.getElementById('cookie-banner');
+        
+        if (!cookieConsent && cookieBanner) {
+          // Mostrar el banner de cookies con una pequeña animación
+          setTimeout(() => {
+            cookieBanner.classList.remove('translate-y-full');
+          }, 500);
+          
+          // Eventos de botones
+          const acceptAllBtn = document.getElementById('cookie-accept-all');
+          const acceptEssentialBtn = document.getElementById('cookie-accept-essential');
+          
+          if (acceptAllBtn) {
+            acceptAllBtn.addEventListener('click', function() {
+              localStorage.setItem('cookie-consent', 'all');
+              cookieBanner.classList.add('translate-y-full');
+            });
+          }
+          
+          if (acceptEssentialBtn) {
+            acceptEssentialBtn.addEventListener('click', function() {
+              localStorage.setItem('cookie-consent', 'essential');
+              cookieBanner.classList.add('translate-y-full');
+            });
+          }
+        }
+      });
+    </script>
+	</body>
+</html>

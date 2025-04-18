@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets'; // Para optimizar el logo
+// Asegúrate de tener un logo.svg en public/
+// import logo from '../assets/logo.svg'; // Si prefieres usar assets de src/
+---
+<header class="bg-white sticky top-0 z-50 shadow-soft">
+  <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <a href="/" class="flex items-center space-x-1 font-bold text-xl logo-group">
+      <span class="brand-text-primary">Retos</span><span class="brand-text-secondary">Turísticos</span>
+    </a>
+
+    <!-- Menú de escritorio -->
+    <div class="hidden md:flex space-x-6">
+      <a href="/" class="text-text-medium hover:text-primary font-medium transition-colors duration-300">Inicio</a>
+      <a href="#sobre-la-revista" class="text-text-medium hover:text-primary font-medium transition-colors duration-300">Sobre la revista</a>
+      <a href="#articulos-destacados" class="text-text-medium hover:text-primary font-medium transition-colors duration-300">Artículos destacados</a>
+      <a href="#contacto" class="text-text-medium hover:text-primary font-medium transition-colors duration-300">Contacto</a>
+    </div>
+
+    <!-- Botón Hamburger para móvil -->
+    <div class="md:hidden">
+      <button id="mobile-menu-button" class="text-text-dark focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path> <!-- Icono Hamburger -->
+        </svg>
+         <svg class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> <!-- Icono 'X' -->
+         </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Menú desplegable móvil -->
+  <div id="mobile-menu" class="md:hidden hidden bg-white absolute w-full top-full left-0 shadow-soft overflow-hidden transition-all duration-300 ease-out max-h-0">
+    <div class="flex flex-col px-6 py-4 space-y-4">
+      <a href="/" class="block text-text-medium hover:text-primary transition-colors duration-300">Inicio</a>
+      <a href="#sobre-la-revista" class="block text-text-medium hover:text-primary transition-colors duration-300">Sobre la revista</a>
+      <a href="#publica" class="block text-text-medium hover:text-primary transition-colors duration-300">Publica con nosotros</a>
+      <a href="#contacto" class="block text-text-medium hover:text-primary transition-colors duration-300">Contacto</a>
+    </div>
+  </div>
+</header>
+
+<script src="../scripts/mobileMenu.ts"></script>
+
+<style>
+  /* Estilos adicionales para la transición */
+  #mobile-menu {
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    opacity: 0; /* Estado inicial para la animación de opacidad */
+  }
+
+  /* Clases para el texto bicolor de la marca */
+  .brand-text-primary {
+    @apply text-primary transition-colors duration-300;
+  }
+  
+  .brand-text-secondary {
+    @apply text-text-dark transition-colors duration-300;
+  }
+  
+  /* Efecto hover en el logo completo */
+  .group:hover .brand-text-primary {
+    @apply text-secondary;
+  }
+  
+  .group:hover .brand-text-secondary {
+    @apply text-primary;
+  }
+</style>

@@ -1,0 +1,242 @@
+---
+// src/components/Testimonials.astro
+// Componente mejorado de testimonios con slider funcional
+
+interface Testimonial {
+  quote: string;
+  author: string;
+  title: string;
+  image?: string;
+  rating?: number; // Valoración opcional (1-5)
+}
+
+const testimonials: Testimonial[] = [
+  {
+    quote: "Publicar en Retos Turísticos amplificó significativamente el alcance de mi investigación. El proceso editorial fue impecable.",
+    author: "Dra. Elena García",
+    title: "Investigadora Principal, Universidad Complutense",
+    image: "/testimonials/testimonio1.jpg", // Reemplazar con la ruta real si existe
+    rating: 5
+  },
+  {
+    quote: "Una plataforma esencial para estar al día con las tendencias y desafíos más relevantes del turismo actual.",
+    author: "Marcos López",
+    title: "Consultor Turístico Internacional",
+    image: "/testimonials/testimonio2.jpg", // Reemplazar con la ruta real si existe
+    rating: 4
+  },
+  {
+    quote: "La calidad de los artículos y la perspectiva global hacen de esta revista una lectura obligada.",
+    author: "Sofía Chen",
+    title: "Directora de Marketing, Cadena Hotelera",
+    image: "/testimonials/testimonio3.jpg", // Reemplazar con la ruta real si existe
+    rating: 5
+  },
+];
+---
+
+<section id="testimonios" class="py-16 md:py-24 bg-off-white relative overflow-hidden">
+  <!-- Elementos decorativos de fondo -->
+  <div class="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2 z-0"></div>
+  <div class="absolute bottom-0 right-0 w-64 h-64 bg-secondary/5 rounded-full translate-x-1/3 translate-y-1/3 z-0"></div>
+  
+  <div class="container mx-auto px-4 sm:px-6 relative z-10">
+    <div class="text-center mb-10 md:mb-16">
+      <h2 class="section-title inline-block relative mb-2">
+        Lo que dicen nuestros <span class="section-title-accent">lectores</span>
+        <div class="absolute h-1 w-24 bg-primary/30 bottom-0 left-1/2 -translate-x-1/2 rounded-full"></div>
+      </h2>
+      <p class="mt-4 text-text-medium max-w-2xl mx-auto px-4">
+        Opiniones de investigadores, académicos y profesionales que confían en nuestra revista
+      </p>
+    </div>
+
+    <!-- Contenedor del Slider -->
+    <div 
+      id="testimonials-container" 
+      class="relative mx-auto max-w-5xl"
+      aria-roledescription="carousel"
+      aria-label="Testimonios de usuarios"
+    >
+      <!-- Track del slider con snap scroll -->
+      <div 
+        id="testimonials-track" 
+        class="flex transition-transform duration-500 ease-out"
+        tabindex="0"
+        role="region"
+        aria-live="polite"
+      >
+        {testimonials.map((testimonial, index) => (
+          <div 
+            class="testimonial-slide min-w-full px-2 sm:px-8 snap-center"
+            role="group"
+            aria-roledescription="slide" 
+            aria-label={`Testimonio de ${testimonial.author}`}
+            data-index={index}
+            tabindex="-1"
+          >
+            <div class="bg-white rounded-2xl shadow-card p-5 md:p-10 w-full h-full flex flex-col md:flex-row items-center md:items-start gap-5 md:gap-8 transform transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px]">
+              <!-- Contenedor para avatar y datos del autor -->
+              <div class="md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left">
+                <div class="mb-4 relative">
+                  {testimonial.image ? (
+                    <img 
+                      src={testimonial.image} 
+                      alt={`Foto de ${testimonial.author}`} 
+                      class="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover ring-4 ring-primary/20"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-primary/10 to-secondary/20 flex items-center justify-center text-4xl md:text-5xl font-bold text-primary ring-4 ring-primary/20">
+                      {testimonial.author.substring(0, 1)}
+                    </div>
+                  )}
+                  
+                  <!-- Indicador visual de "destacado" para el testimonio actual -->
+                  <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-accent flex items-center justify-center transform translate-x-1/4 -translate-y-1/4 testimonial-active-indicator opacity-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-white">
+                      <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <p class="font-bold text-xl text-text-dark">{testimonial.author}</p>
+                  <p class="text-text-light text-sm">{testimonial.title}</p>
+                </div>
+                
+                {testimonial.rating && (
+                  <div class="flex items-center gap-1 mt-2">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span class={`inline-block ${i < testimonial.rating! ? 'text-accent' : 'text-light-gray'}`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                          <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <!-- Contenido del Testimonio -->
+              <div class="md:w-2/3 text-left">
+                <blockquote class="text-lg md:text-xl text-text-medium font-light leading-relaxed relative">
+                  <svg class="text-primary/10 w-8 h-8 md:w-12 md:h-12 absolute -top-3 md:-top-5 -left-2 rotate-180 transform" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
+                  </svg>
+                  <p class="relative z-10 pl-5 md:pl-7 text-mobile-blockquote md:text-lg">{testimonial.quote}</p>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <!-- Controles y navegación -->
+      <div class="mt-12 relative z-20 flex flex-col gap-5 sm:flex-row sm:justify-between items-center">
+        <!-- Indicadores de puntos -->
+        <div class="flex items-center gap-1.5 order-2 sm:order-1">
+          {testimonials.map((_, index) => (
+            <button 
+              class="testimonial-dot transition-all duration-300 h-2.5 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" 
+              data-index={index} 
+              aria-label={`Ver testimonio ${index + 1} de ${testimonials.length}`}
+              aria-controls="testimonials-track"
+            ></button>
+          ))}
+        </div>
+        
+        <!-- Botones de navegación -->
+        <div class="flex gap-3 order-1 sm:order-2">
+          <button 
+            id="prev-testimonial" 
+            class="control-button bg-white text-primary p-3 rounded-full shadow-soft hover:bg-primary hover:text-white transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-label="Testimonio anterior"
+            aria-controls="testimonials-track"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          <button 
+            id="next-testimonial" 
+            class="control-button bg-primary text-white p-3 rounded-full shadow-soft hover:bg-secondary transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            aria-label="Siguiente testimonio"
+            aria-controls="testimonials-track"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Estilo para los indicadores de puntos */
+  .testimonial-dot {
+    @apply bg-light-gray w-3;
+  }
+  
+  .testimonial-dot[data-active="true"] {
+    @apply bg-primary w-8;
+  }
+  
+  /* Estilo para marcar el testimonio activo */
+  .testimonial-slide[aria-hidden="false"] .testimonial-active-indicator {
+    @apply opacity-100;
+  }
+  
+  /* Mejoras para dispositivos móviles */
+  @media (max-width: 768px) {
+    .testimonial-slide > div {
+      @apply bg-white/95 backdrop-blur-sm border border-gray-100;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    
+    blockquote {
+      @apply text-base leading-relaxed;
+    }
+    
+    /* Mejora del contraste en dispositivos móviles */
+    blockquote p {
+      @apply text-text-dark font-medium;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    }
+    
+    .text-mobile-blockquote {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    
+    /* Ajustes para mejorar la visualización en móviles */
+    .section-title {
+      @apply text-2xl;
+    }
+    
+    .testimonial-active-indicator {
+      top: -4px;
+      right: -4px;
+    }
+  }
+  
+  /* Animaciones para los testimonios */
+  @keyframes fadeInScale {
+    from {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  .testimonial-slide[aria-hidden="false"] > div {
+    animation: fadeInScale 0.6s ease-out;
+  }
+</style>
+
+<script src="../scripts/testimonials.ts"></script>

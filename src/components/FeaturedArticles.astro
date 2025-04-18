@@ -1,0 +1,130 @@
+---
+// src/components/FeaturedArticles.astro
+// Componente para mostrar artículos destacados con CTA hacia la revista
+
+interface Article {
+  title: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  image: string;
+  category: string;
+  url: string;
+}
+
+// Artículos destacados de muestra
+const featuredArticles: Article[] = [
+  {
+    title: "Turismo sostenible en destinos emergentes: Estrategias de desarrollo local",
+    excerpt: "Este estudio analiza las estrategias efectivas para implementar modelos de turismo sostenible que beneficien a las comunidades locales mientras preservan los recursos naturales y culturales.",
+    author: "Dr. Manuel Rodríguez",
+    date: "Mayo 2023",
+    image: "/articles/turismo-sostenible.jpg", // Reemplazar con imagen real
+    category: "Sostenibilidad",
+    url: "https://revista-retos-turisticos.com/articulos/turismo-sostenible" // URL de ejemplo
+  },
+  {
+    title: "Impacto de la inteligencia artificial en la experiencia del turista: Casos de estudio",
+    excerpt: "Una investigación sobre cómo las tecnologías de IA están transformando la experiencia del turista, desde la planificación del viaje hasta las interacciones en destino.",
+    author: "Dra. Laura Martínez",
+    date: "Febrero 2023",
+    image: "/articles/ia-turismo.jpg", // Reemplazar con imagen real
+    category: "Innovación",
+    url: "https://revista-retos-turisticos.com/articulos/ia-turismo" // URL de ejemplo
+  }
+];
+
+// URL de la revista completa
+const journalUrl = "https://retosturisticos.umcc.cu/";
+---
+
+<section id="articulos-destacados" class="py-16 bg-light-gray">
+  <div class="container mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12">
+      <h2 class="section-title inline-block relative mb-2">
+        Artículos <span class="section-title-accent">destacados</span>
+        <div class="absolute h-1 w-24 bg-primary/30 bottom-0 left-1/2 -translate-x-1/2 rounded-full"></div>
+      </h2>
+      <p class="mt-4 text-text-medium max-w-2xl mx-auto">
+        Explora algunas de nuestras publicaciones más relevantes y descubre la calidad de nuestro contenido
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+      {featuredArticles.map((article) => (
+        <article class="bg-white rounded-xl shadow-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] flex flex-col h-full">
+          <div class="relative h-48 sm:h-56 overflow-hidden">
+            <img 
+              src={article.image} 
+              alt={`Imagen para ${article.title}`} 
+              class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+              onerror="this.src='/articles/default-article.jpg'; this.onerror=null;"
+              loading="lazy"
+            />
+            <span class="absolute top-4 left-4 bg-primary text-white text-xs font-bold py-1 px-3 rounded-full">{article.category}</span>
+          </div>
+          
+          <div class="p-6 flex flex-col flex-grow">
+            <div class="flex justify-between text-sm text-text-light mb-2">
+              <span>{article.date}</span>
+              <span>{article.author}</span>
+            </div>
+            
+            <h3 class="text-xl font-bold mb-3 text-text-dark leading-tight">
+              <a href={article.url} class="hover:text-primary transition-colors duration-300" target="_blank">
+                {article.title}
+              </a>
+            </h3>
+            
+            <p class="text-text-medium mb-6">{article.excerpt}</p>
+            
+            <div class="mt-auto">
+              <a 
+                href={article.url} 
+                class="text-primary font-medium inline-flex items-center hover:text-secondary transition-colors duration-300"
+                target="_blank"
+                aria-label={`Leer artículo: ${article.title}`}
+              >
+                Leer artículo completo
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 ml-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+    
+    <div class="mt-12 text-center">
+      <a 
+        href={journalUrl} 
+        class="cta-button"
+        target="_blank"
+        rel="noopener"
+      >
+        Acceder a la revista
+      </a>
+      
+      <p class="mt-4 text-sm text-text-light">
+        Descubre investigaciones, estudios de caso y análisis de tendencias en nuestra publicación especializada
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Estilo para el botón CTA */
+  .cta-button {
+    @apply inline-flex items-center justify-center bg-secondary text-white font-bold py-3 px-8 
+           rounded-lg text-lg transition-all duration-300 gap-2
+           hover:bg-secondary/90 transform hover:scale-105
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 
+           shadow-lg;
+  }
+  
+  /* Efecto de enfoque para enlaces accesibles */
+  a:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-1;
+  }
+</style> 

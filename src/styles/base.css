@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados adicionales */
+@layer components {
+  /* Utilidades de marca y texto */
+  .brand-text-primary {
+    @apply text-primary transition-colors duration-300;
+  }
+
+  .brand-text-secondary {
+    @apply text-text-dark transition-colors duration-300;
+  }
+
+  /* Logo hover effect */
+  .logo-group:hover .brand-text-primary {
+    @apply text-secondary;
+  }
+
+  .logo-group:hover .brand-text-secondary {
+    @apply text-primary;
+  }
+
+  /* Texto destacado con fondo y efectos */
+  .featured-text {
+    @apply text-primary bg-text-dark/60 px-4 py-2 rounded-md
+           transform hover:scale-105 transition-all duration-300 
+           shadow-xl backdrop-blur-sm;
+  }
+
+  /* Botón de acción principal */
+  .action-button {
+    @apply inline-block bg-primary text-white font-bold py-3 px-8 
+           rounded-lg text-lg transition-all duration-300 
+           transform hover:scale-105 hover:bg-secondary 
+           focus:outline-none focus:ring-2 focus:ring-primary 
+           focus:ring-opacity-50 shadow-soft;
+  }
+
+  /* Título de sección */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-text-dark mb-6;
+  }
+
+  .section-title-accent {
+    @apply text-primary;
+  }
+}
