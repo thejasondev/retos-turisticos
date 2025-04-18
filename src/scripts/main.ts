@@ -11,10 +11,21 @@ import "./about";
 import { initBenefitsCarousel } from "./benefits";
 import { initMissionToggle } from "./mission";
 import { initTestimonialsCarousel } from "./testimonials";
+import { initMobileMenu } from "./mobileMenu";
 
 // Inicialización global
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Scripts cargados correctamente");
+
+  // Inicializar Header (Mobile Menu)
+  const headerSections =
+    document.querySelectorAll<HTMLElement>(".js-header-section");
+  headerSections.forEach((section, index) => {
+    if (!section.id) {
+      section.id = `header-section-${index}`;
+    }
+    initMobileMenu(`#${section.id}`);
+  });
 
   // Inicializar carruseles de beneficios
   const benefitSections = document.querySelectorAll<HTMLElement>(

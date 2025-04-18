@@ -1,69 +1,98 @@
 /**
- * Manejo del menú móvil
- * Este script proporciona la funcionalidad del menú para dispositivos móviles
+ * Manejo del menú móvil lateral
+ * Este script proporciona la funcionalidad para el menú deslizante en móviles.
  */
 
-document.addEventListener("DOMContentLoaded", initMobileMenu);
+export function initMobileMenu(containerSelector: string): void {
+  const header = document.querySelector<HTMLElement>(containerSelector);
+  if (!header) return;
 
-function initMobileMenu(): void {
-  const menuButton = document.getElementById("mobile-menu-button");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const hamburgerIcon = menuButton?.querySelector("svg:first-child");
-  const closeIcon = menuButton?.querySelector("svg:last-child");
+  const menuButton = header.querySelector<HTMLButtonElement>(
+    "#mobile-menu-button"
+  );
+  const overlay = header.querySelector<HTMLElement>("#mobile-menu-overlay");
+  const panel = header.querySelector<HTMLElement>("#mobile-menu-panel");
+  const closeButton = panel?.querySelector<HTMLButtonElement>(
+    "#mobile-menu-close-button"
+  );
+  const hamburgerIcon = header.querySelector<SVGElement>("#hamburger-icon");
+  const closeIcon = header.querySelector<SVGElement>("#close-icon");
+  const menuLinks = panel?.querySelectorAll("a");
 
-  if (!menuButton || !mobileMenu) return;
+  if (
+    !menuButton ||
+    !overlay ||
+    !panel ||
+    !closeButton ||
+    !hamburgerIcon ||
+    !closeIcon
+  ) {
+    console.error("Mobile menu elements not found within", containerSelector);
+    return;
+  }
 
+  function openMenu() {
+    menuButton!.setAttribute("aria-expanded", "true");
+    overlay!.classList.remove("pointer-events-none");
+    overlay!.classList.add("opacity-100");
+    overlay!.setAttribute("aria-hidden", "false");
+    panel!.classList.remove("translate-x-full");
+    panel!.setAttribute("aria-hidden", "false");
+    document.body.classList.add("overflow-hidden"); // Lock body scroll
+    hamburgerIcon!.classList.add("hidden");
+    closeIcon!.classList.remove("hidden");
+    // Focus the close button when menu opens for accessibility
+    setTimeout(() => closeButton!.focus(), 300);
+  }
+
+  function closeMenu() {
+    menuButton!.setAttribute("aria-expanded", "false");
+    overlay!.classList.add("pointer-events-none");
+    overlay!.classList.remove("opacity-100");
+    overlay!.setAttribute("aria-hidden", "true");
+    panel!.classList.add("translate-x-full");
+    panel!.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("overflow-hidden"); // Unlock body scroll
+    hamburgerIcon!.classList.remove("hidden");
+    closeIcon!.classList.add("hidden");
+    // Return focus to the menu button
+    menuButton!.focus();
+  }
+
+  // Event listeners
   menuButton.addEventListener("click", () => {
     const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
-    menuButton.setAttribute("aria-expanded", String(!isExpanded));
-
-    // Toggle de clases para mostrar/ocultar y animar
-    if (mobileMenu.classList.contains("hidden")) {
-      // Abrir menú
-      mobileMenu.classList.remove("hidden");
-      // Pequeño delay para permitir que 'hidden' se quite antes de la transición
-      requestAnimationFrame(() => {
-        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + "px";
-        mobileMenu.style.opacity = "1";
-      });
-      hamburgerIcon?.classList.add("hidden");
-      closeIcon?.classList.remove("hidden");
+    if (isExpanded) {
+      closeMenu();
     } else {
-      // Cerrar menú
-      mobileMenu.style.maxHeight = "0";
-      mobileMenu.style.opacity = "0";
-      // Esperar a que termine la transición para añadir 'hidden'
-      mobileMenu.addEventListener(
-        "transitionend",
-        () => {
-          mobileMenu.classList.add("hidden");
-        },
-        { once: true }
-      ); // Asegura que el listener se ejecute solo una vez
-
-      hamburgerIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
+      openMenu();
     }
   });
 
-  // Cerrar menú si se hace clic en un enlace (opcional)
-  mobileMenu.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      if (!mobileMenu.classList.contains("hidden")) {
-        menuButton.click(); // Simula clic en el botón para cerrar
-      }
-    });
+  closeButton.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu); // Close when clicking backdrop
+
+  // Close menu if a link is clicked
+  menuLinks?.forEach((link) => {
+    link.addEventListener("click", closeMenu);
   });
 
-  // Cerrar el menú en cambio de tamaño de ventana
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 768 && !mobileMenu.classList.contains("hidden")) {
-      mobileMenu.classList.add("hidden");
-      mobileMenu.style.maxHeight = "0";
-      mobileMenu.style.opacity = "0";
-      hamburgerIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
-      menuButton.setAttribute("aria-expanded", "false");
+  // Close menu on Escape key
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      menuButton.getAttribute("aria-expanded") === "true"
+    ) {
+      closeMenu();
     }
   });
+
+  // Optional: Close menu on resize if needed (might be annoying)
+  // window.addEventListener("resize", () => {
+  //   if (window.innerWidth >= 768 && menuButton.getAttribute("aria-expanded") === "true") {
+  //     closeMenu();
+  //   }
+  // });
+
+  // console.log(`Mobile menu initialized for ${containerSelector}`);
 }
