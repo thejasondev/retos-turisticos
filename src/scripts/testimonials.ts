@@ -1,33 +1,92 @@
 /**
  * testimonials.ts
- * Script para manejar la funcionalidad del carrusel de testimonios
+ * Script para manejar la funcionalidad del carrusel de testimonios usando Scroll Snapping
  */
 
-document.addEventListener("DOMContentLoaded", () => {
-  initTestimonialsCarousel();
-});
+export function initTestimonialsCarousel(containerSelector: string): void {
+  const container = document.querySelector<HTMLElement>(containerSelector);
+  if (!container) {
+    // console.warn(`Testimonials container not found for selector: ${containerSelector}`);
+    return;
+  }
 
-/**
- * Inicializa el carrusel de testimonios
- */
-function initTestimonialsCarousel() {
-  const carousel = document.querySelector(".testimonials-carousel");
-  const slides = document.querySelectorAll(".testimonial-slide");
+  const track = container.querySelector<HTMLElement>("#testimonials-track");
+  const slides = container.querySelectorAll<HTMLElement>(".testimonial-slide");
+  const prevButton =
+    container.querySelector<HTMLButtonElement>("#prev-testimonial");
+  const nextButton =
+    container.querySelector<HTMLButtonElement>("#next-testimonial");
+  const indicators =
+    container.querySelectorAll<HTMLButtonElement>(".testimonial-dot");
   const totalSlides = slides.length;
 
-  if (!carousel || totalSlides === 0) return;
-
-  // Elementos de navegación
-  const prevButton = document.querySelector(".carousel-prev");
-  const nextButton = document.querySelector(".carousel-next");
-  const indicators = document.querySelectorAll(".carousel-indicator");
+  if (!track || totalSlides === 0 || indicators.length !== totalSlides) {
+    console.error(
+      `Testimonials track, slides, or indicators missing/mismatched within ${containerSelector}.`
+    );
+    return;
+  }
 
   let currentIndex = 0;
+  let slideWidth = 0;
+  let isProgrammaticScroll = false; // Flag to prevent scroll listener during button clicks
+  let scrollTimeout: number;
 
-  // Configurar estado inicial
-  updateCarouselState();
+  function calculateSlideWidth() {
+    // Use the first slide's offsetWidth as it includes padding
+    // Assumes all slides are the same width due to min-w-full
+    if (slides.length > 0) {
+      slideWidth = slides[0].offsetWidth;
+    }
+    // console.log(`Slide width for ${containerSelector}: ${slideWidth}`);
+  }
 
-  // Event listeners
+  function updateUI(newIndex: number) {
+    if (newIndex < 0 || newIndex >= totalSlides) return;
+    currentIndex = newIndex;
+
+    // Update aria-hidden for slides
+    slides.forEach((slide, index) => {
+      slide.setAttribute(
+        "aria-hidden",
+        index !== currentIndex ? "true" : "false"
+      );
+    });
+
+    // Update indicators
+    indicators.forEach((dot, index) => {
+      dot.dataset.active = index === currentIndex ? "true" : "false";
+    });
+
+    // Update button states (optional: disable at ends)
+    if (prevButton) {
+      prevButton.disabled = currentIndex === 0;
+    }
+    if (nextButton) {
+      nextButton.disabled = currentIndex === totalSlides - 1;
+    }
+    // console.log(`UI updated for index ${currentIndex} in ${containerSelector}`);
+  }
+
+  function goToSlide(index: number) {
+    if (!track || slideWidth <= 0 || index < 0 || index >= totalSlides) return;
+
+    const targetScrollLeft = index * slideWidth;
+    isProgrammaticScroll = true; // Set flag before scrolling
+    track.scrollTo({
+      left: targetScrollLeft,
+      behavior: "smooth",
+    });
+    updateUI(index);
+
+    // Reset flag after scroll likely finished (could use scrollend event in future)
+    setTimeout(() => {
+      isProgrammaticScroll = false;
+    }, 600); // Adjust timeout based on scroll duration
+  }
+
+  // --- Event Listeners ---
+
   if (prevButton) {
     prevButton.addEventListener("click", () => {
       goToSlide(currentIndex - 1);
@@ -40,69 +99,49 @@ function initTestimonialsCarousel() {
     });
   }
 
-  // Configurar indicadores
   indicators.forEach((indicator, index) => {
     indicator.addEventListener("click", () => {
       goToSlide(index);
     });
   });
 
-  // Auto-avance del carrusel (descomentar para activar)
-  // const autoPlayInterval = setInterval(() => {
-  //   goToSlide(currentIndex + 1);
-  // }, 5000);
+  track.addEventListener(
+    "scroll",
+    () => {
+      if (isProgrammaticScroll || slideWidth <= 0) return; // Skip if scroll triggered by buttons
 
-  /**
-   * Navega a una diapositiva específica
-   */
-  function goToSlide(index: number) {
-    // Manejar el ciclo circular
-    if (index < 0) {
-      currentIndex = totalSlides - 1;
-    } else if (index >= totalSlides) {
-      currentIndex = 0;
-    } else {
-      currentIndex = index;
-    }
+      clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        // Find the index of the slide closest to the left edge (snap point)
+        const currentScrollLeft = track.scrollLeft;
+        const newIndex = Math.round(currentScrollLeft / slideWidth);
 
-    updateCarouselState();
-  }
+        if (
+          newIndex !== currentIndex &&
+          newIndex >= 0 &&
+          newIndex < totalSlides
+        ) {
+          updateUI(newIndex);
+        }
+      }, 150); // Debounce
+    },
+    { passive: true }
+  );
 
-  /**
-   * Actualiza el estado visual del carrusel
-   */
-  function updateCarouselState() {
-    // Actualizar posición de las diapositivas
-    slides.forEach((slide, index) => {
-      const slideElement = slide as HTMLElement;
+  // --- Initialization ---
+  calculateSlideWidth();
+  updateUI(0); // Set initial state
 
-      if (index === currentIndex) {
-        slideElement.classList.add("active");
-        slideElement.setAttribute("aria-hidden", "false");
-        slideElement.style.opacity = "1";
-        slideElement.style.transform = "translateX(0)";
-      } else {
-        slideElement.classList.remove("active");
-        slideElement.setAttribute("aria-hidden", "true");
-        slideElement.style.opacity = "0";
+  // Recalculate width on resize
+  window.addEventListener("resize", () => {
+    // Debounce resize calculation
+    clearTimeout(scrollTimeout); // Reuse scrollTimeout for debounce
+    scrollTimeout = window.setTimeout(() => {
+      calculateSlideWidth();
+      // Optional: snap back to current slide after resize if needed
+      // goToSlide(currentIndex); // Re-snap might be jerky, test carefully
+    }, 250);
+  });
 
-        // Posicionar diapositivas fuera de la vista
-        const direction = index > currentIndex ? 1 : -1;
-        slideElement.style.transform = `translateX(${direction * 100}%)`;
-      }
-    });
-
-    // Actualizar indicadores
-    indicators.forEach((dot, index) => {
-      if (index === currentIndex) {
-        dot.classList.add("active");
-        dot.setAttribute("aria-current", "true");
-      } else {
-        dot.classList.remove("active");
-        dot.setAttribute("aria-current", "false");
-      }
-    });
-  }
+  // console.log(`Testimonials carousel initialized for ${containerSelector}`);
 }
-
-export { initTestimonialsCarousel };

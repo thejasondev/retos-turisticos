@@ -1,20 +1,37 @@
 ---
 ---
 
-<section id="sobre-la-revista" class="py-20 bg-light-gray relative overflow-hidden">
-  <!-- Patrón de fondo decorativo sutil -->
-  <div class="absolute inset-0 opacity-[0.03] pointer-events-none">
-    <img src="/images/pattern.svg" alt="" class="w-full h-full object-cover" aria-hidden="true" />
-  </div>
-
+<section id="sobre-la-revista" class="py-12 md:py-20 bg-light-gray relative overflow-hidden">
   <div class="container mx-auto px-4 relative z-10">
-    <div class="max-w-4xl mx-auto text-center mb-12">
+    <div class="max-w-4xl mx-auto text-center mb-8 md:mb-12">
       <h2 class="text-3xl md:text-4xl font-bold text-text-dark mb-6 animate-fadeIn section-title inline-block relative">
         Sobre <span class="text-primary section-title-accent">Retos Turísticos</span>
         <div class="absolute h-1 w-24 bg-primary/30 bottom-0 left-1/2 -translate-x-1/2 rounded-full"></div>
       </h2>
       
-      <div class="prose prose-lg mx-auto text-text-medium animate-fadeIn" style="animation-delay: 0.2s;">
+      <!-- Versión móvil: texto más compacto con botón "leer más" -->
+      <div class="prose prose-lg mx-auto text-text-medium animate-fadeIn md:hidden" style="animation-delay: 0.2s;">
+        <p class="mb-2 line-clamp-3" id="about-text-short">
+          Somos una revista de publicaciones científicas cubanas certificada por el CITMA, fundada en el año 2000 por la Universidad de Matanzas...
+        </p>
+        <button id="read-more-btn" class="text-primary font-medium hover:underline mt-2 focus:outline-none flex items-center mx-auto">
+          <span>Leer más</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+        <div id="about-text-full" class="hidden mt-3">
+          <p class="mb-3">
+            Somos una revista de publicaciones científicas cubanas certificada por el Ministerio de Ciencia Tecnología y Medio Ambiente (CITMA). La revista fue fundada en versión impresa en el año 2000, editada por la Universidad de Matanzas.
+          </p>
+          <p>
+            Actualmente cuenta con la versión en soporte electrónico. Adoptamos la publicación continua en armonía con la filosofía de la "Open Science". Nos unimos al reconocimiento a la UNESCO por la Recomendación Sobre Ciencia Abierta, aprobada en su 41ª Conferencia General.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Versión desktop: texto completo -->
+      <div class="prose prose-lg mx-auto text-text-medium animate-fadeIn hidden md:block" style="animation-delay: 0.2s;">
         <p class="mb-4">
           Somos una revista de publicaciones científicas cubanas certificada por el Ministerio de Ciencia Tecnología y Medio Ambiente (CITMA). La revista fue fundada en versión impresa en el año 2000, editada por la Universidad de Matanzas.
         </p>
@@ -24,11 +41,43 @@
       </div>
     </div>
 
-    <!-- Cronología / Historia -->
-    <div class="max-w-4xl mx-auto mb-16 bg-white p-6 rounded-xl shadow-card">
-      <h3 class="text-2xl font-bold text-text-dark mb-6 text-center">Nuestra Trayectoria</h3>
+    <!-- Cronología / Historia - Versión móvil con tabs -->
+    <div class="max-w-4xl mx-auto mb-12 md:mb-16 bg-white p-5 md:p-6 rounded-xl shadow-card">
+      <h3 class="text-xl md:text-2xl font-bold text-text-dark mb-4 md:mb-6 text-center">Nuestra Trayectoria</h3>
       
-      <div class="relative">
+      <!-- Tabs para móvil -->
+      <div class="md:hidden">
+        <div class="flex border-b border-gray-200 mb-4" role="tablist" id="timeline-tabs">
+          <button class="flex-1 py-2 px-1 text-center font-medium text-primary border-b-2 border-primary" data-year="2000">2000</button>
+          <button class="flex-1 py-2 px-1 text-center font-medium text-text-medium border-b-2 border-transparent" data-year="2010">2010</button>
+          <button class="flex-1 py-2 px-1 text-center font-medium text-text-medium border-b-2 border-transparent" data-year="2015">2015</button>
+          <button class="flex-1 py-2 px-1 text-center font-medium text-text-medium border-b-2 border-transparent" data-year="2025">2025</button>
+        </div>
+        
+        <!-- Contenido de tabs -->
+        <div class="timeline-content" id="timeline-2000">
+          <h4 class="text-xl font-bold text-primary mb-2">Fundación</h4>
+          <p class="text-text-medium">Creación de la revista en formato impreso por la Universidad de Matanzas.</p>
+        </div>
+        
+        <div class="timeline-content hidden" id="timeline-2010">
+          <h4 class="text-xl font-bold text-secondary mb-2">Versión Digital</h4>
+          <p class="text-text-medium">Lanzamiento de la primera versión digital, ampliando nuestro alcance internacional.</p>
+        </div>
+        
+        <div class="timeline-content hidden" id="timeline-2015">
+          <h4 class="text-xl font-bold text-primary mb-2">Indexación Internacional</h4>
+          <p class="text-text-medium">Inclusión en bases de datos y directorios académicos internacionales.</p>
+        </div>
+        
+        <div class="timeline-content hidden" id="timeline-2025">
+          <h4 class="text-xl font-bold text-accent mb-2">Actualidad</h4>
+          <p class="text-text-medium">Adopción de la publicación continua y principios de Ciencia Abierta.</p>
+        </div>
+      </div>
+      
+      <!-- Línea del tiempo para desktop -->
+      <div class="relative hidden md:block">
         <!-- Línea central -->
         <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-primary/20 rounded-full"></div>
         
@@ -67,7 +116,7 @@
           </div>
           <div class="hidden md:block"></div>
 
-          <!-- 2023 - Actualidad -->
+          <!-- 2025 - Actualidad -->
           <div class="hidden md:block"></div>
           <div class="md:text-left md:pl-12 relative transform transition hover:-translate-y-1">
             <div class="absolute left-0 top-0 md:-translate-x-1/2 w-6 h-6 rounded-full bg-accent border-4 border-white"></div>
@@ -81,7 +130,61 @@
       </div>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8 md:gap-12">
+    <!-- Slider para las características en móvil -->
+    <div class="md:hidden mb-8">
+      <div class="overflow-x-auto pb-6 hide-scrollbar" id="features-carousel">
+        <div class="flex space-x-4 w-max px-2">
+          <!-- Calidad Editorial -->
+          <div class="bg-white p-5 rounded-xl text-center shadow-card flex-shrink-0" style="width: 280px;">
+            <div class="w-14 h-14 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-text-dark">Calidad Editorial</h3>
+            <p class="text-text-medium text-sm">
+              Proceso de revisión por pares riguroso que garantiza la calidad y relevancia de todos los artículos publicados.
+            </p>
+          </div>
+
+          <!-- Alcance Global -->
+          <div class="bg-white p-5 rounded-xl text-center shadow-card flex-shrink-0" style="width: 280px;">
+            <div class="w-14 h-14 bg-secondary/10 text-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-text-dark">Alcance Global</h3>
+            <p class="text-text-medium text-sm">
+              Difusión internacional a través de múltiples plataformas académicas y bases de datos científicas.
+            </p>
+          </div>
+
+          <!-- Comunidad Colaborativa -->
+          <div class="bg-white p-5 rounded-xl text-center shadow-card flex-shrink-0" style="width: 280px;">
+            <div class="w-14 h-14 bg-accent/10 text-accent rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-text-dark">Comunidad Colaborativa</h3>
+            <p class="text-text-medium text-sm">
+              Red de investigadores, profesionales y académicos que comparten conocimientos y experiencias para avanzar en el sector.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Indicadores del slider -->
+      <div class="flex justify-center space-x-2 mt-4" id="features-indicators">
+        <button class="h-2 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 w-4 bg-primary opacity-100" aria-current="true" aria-label="Ir a la característica 1" data-indicator-index="0"></button>
+        <button class="h-2 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 w-2 bg-gray-300 opacity-50" aria-label="Ir a la característica 2" data-indicator-index="1"></button>
+        <button class="h-2 rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 w-2 bg-gray-300 opacity-50" aria-label="Ir a la característica 3" data-indicator-index="2"></button>
+      </div>
+    </div>
+
+    <!-- Grid para desktop -->
+    <div class="hidden md:grid md:grid-cols-3 gap-8 md:gap-12">
       <!-- Calidad Editorial -->
       <div class="bg-white p-6 rounded-xl text-center shadow-card group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 animate-fadeIn" style="animation-delay: 0.3s;">
         <div class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300">
@@ -123,13 +226,23 @@
     </div>
 
     <!-- CTA para conocer más sobre la revista -->
-    <div class="max-w-4xl mx-auto mt-16 text-center">
+    <div class="max-w-4xl mx-auto mt-10 md:mt-16 text-center">
       <a href="#equipo" class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-soft hover:bg-primary/90 transition-all duration-300 transform hover:scale-[1.02]">
         <span>Conoce a nuestro equipo</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 ml-2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
         </svg>
       </a>
     </div>
   </div>
 </section>
+
+<style>
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

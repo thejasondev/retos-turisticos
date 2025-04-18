@@ -35,7 +35,7 @@ const testimonials: Testimonial[] = [
 ];
 ---
 
-<section id="testimonios" class="py-16 md:py-24 bg-off-white relative overflow-hidden">
+<section id="testimonios" class="py-16 md:py-24 bg-off-white relative overflow-hidden js-testimonials-section">
   <!-- Elementos decorativos de fondo -->
   <div class="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2 z-0"></div>
   <div class="absolute bottom-0 right-0 w-64 h-64 bg-secondary/5 rounded-full translate-x-1/3 translate-y-1/3 z-0"></div>
@@ -61,7 +61,7 @@ const testimonials: Testimonial[] = [
       <!-- Track del slider con snap scroll -->
       <div 
         id="testimonials-track" 
-        class="flex transition-transform duration-500 ease-out"
+        class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar"
         tabindex="0"
         role="region"
         aria-live="polite"
@@ -237,6 +237,13 @@ const testimonials: Testimonial[] = [
   .testimonial-slide[aria-hidden="false"] > div {
     animation: fadeInScale 0.6s ease-out;
   }
+  
+  /* Add helper class to hide scrollbar */
+  .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+  .hide-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
 </style>
-
-<script src="../scripts/testimonials.ts"></script>
